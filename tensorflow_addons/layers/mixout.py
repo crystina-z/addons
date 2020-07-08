@@ -6,6 +6,30 @@ import tensorflow as tf
 
 @tf.keras.utils.register_keras_serializable(package="Addons")
 class Mixout(tf.keras.layers.Layer):
+    """Computes mixout.
+
+    "Mixout: Effective regularization to finetune large-scale pretrained language models."
+    Lee, Cheolhyoung, Kyunghyun Cho, and Wanmo Kang.
+    arXiv:1909.11299 (2019)
+
+    For each element of `inputs`, with probability `rate`, outputs the corresponding weight in
+    `pretraine_weights[inputs.name]`, then the replaced tensor scales up the input by `1 / (1-rate)`.
+    The scaling is such that the expected sum is unchanged.
+
+    Argument:
+      seed: A Python integer. Used to create random seeds. See `tf.random.set_seed` for behavior.
+      pretrain_weights: A Python dictionary. Store the mapping from Variables' names to their
+        corresponding pre-trained weight. Each pre-trained weight must be of same shape with
+        the current Variable.
+      rate: A scalar or scalar `Tensor` with the same type as `x`. The probability that each
+        element of `x` is discarded.
+
+    Input shape:
+        nD trainable Variable `(D1, D2, .., Dn)`
+
+    Output shape:
+        nD trainable Variable `(D1, D2, .., Dn)`
+    """
     def __init__(self, rate, pretrain_weights, seed=None, **kwargs):
         super(Mixout, self).__init__()
         if not isinstance(pretrain_weights, dict):
