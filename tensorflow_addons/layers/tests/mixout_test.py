@@ -6,6 +6,7 @@ from tensorflow_addons.layers.mixout import Mixout
 from tensorflow_addons.utils import test_utils
 
 
+@pytest.mark.with_device(["cpu", "gpu"])
 @pytest.mark.usefixtures("set_seeds")
 @pytest.mark.usefixtures("maybe_run_functions_eagerly")
 @pytest.mark.parametrize("dtype", [np.float16, np.float32, np.float64])
